@@ -7,11 +7,22 @@ import re
 from pit import Pit
 
 OYASUMI_LIST = [
-    "おやすみ",
     "寝る",
     "おや",
+    "おやすみ",
+    "おやすみなさい",
+    "おやすみなさいませ",
+    "おやすみなさーい",
+    "おやすみなさ〜い",
+    "おやすみー",
+    "おやすみ〜",
+    "おやすみなサイ",
+    "(つ∀-)ｵﾔｽﾐｰ",
     "(^o^)ﾉ ＜ おやすみー",
-    "おやー"
+    "おやすみです〜",
+    "おやすみのキスを",
+    "おやすみーー",
+    "おやすみなさい〜",
     ]
 OYASUMI_RE = re.compile("|".join(OYASUMI_LIST))
 
@@ -19,14 +30,14 @@ class StreamListener(tweepy.StreamListener):
     def on_status(self, status):
         
         try:
-            if (OYASUMI_RE.search(status.text)):
-                out =  u"%s\t%s\t%s\t%s" % (status.text,
-                                            status.author.screen_name,
-                                            status.created_at,
-                                            status.source,)
+            #if (OYASUMI_RE.search(status.text)):
+            out =  u"%s\t%s\t%s\t%s" % (status.text,
+                                        status.author.screen_name,
+                                        status.created_at,
+                                        status.source,)
                 #print status.author.lang
-                print out
-                
+            print out
+            
         except Exception, e:
             print >> sys.stderr, 'Encounted Exception:', e
             pass
@@ -55,7 +66,8 @@ def main():
     auth.set_access_token(access_key, access_secret)
     
     stream = tweepy.Stream(auth, StreamListener())
-    stream.sample()
+    #stream.sample()
+    stream.filter(track=OYASUMI_LIST)
     
 if __name__ == "__main__":
     main()
